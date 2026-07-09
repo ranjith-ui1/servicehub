@@ -2,8 +2,8 @@ import "./Footer.css";
 
 function Footer() {
   return (
-    <footer>
-      <p>© 2026 ServiceHub. All Rights Reserved.</p>
+    <footer className="footer">
+      <p>© 2025 ServiceHub. All Rights Reserved.</p>
     </footer>
   );
 }
