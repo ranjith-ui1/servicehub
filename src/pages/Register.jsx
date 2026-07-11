@@ -1,283 +1,251 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 function Register() {
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [mobile, setMobile] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [role, setRole] = useState("Customer");
-  const [gender, setGender] = useState("");
-  const [dob, setDob] = useState("");
-  const [city, setCity] = useState("");
-  const [category, setCategory] = useState("");
-  const [skills, setSkills] = useState("");
-  const [resume, setResume] = useState(null);
-  const [terms, setTerms] = useState(false);
-  const [errors, setErrors] = useState({});
- const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
 
- const validateForm = () => {
-
-  let newErrors = {};
-
-  if (!fullName.trim()) {
-    newErrors.fullName = "Full Name is required";
-  }
-
-  if (!email.trim()) {
-    newErrors.email = "Email is required";
-  } else if (
-    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)
-  ) {
-    newErrors.email = "Invalid Email Address";
-  }
-
-  if (!mobile.trim()) {
-    newErrors.mobile = "Mobile Number is required";
-  } else if (!/^[0-9]{10}$/.test(mobile)) {
-    newErrors.mobile = "Mobile Number must be 10 digits";
-  }
-
-  if (!password) {
-    newErrors.password = "Password is required";
-  } else if (
-    !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(password)
-  ) {
-    newErrors.password =
-      "Password must contain uppercase, lowercase, number and special character";
-  }
-
-  if (confirmPassword !== password) {
-    newErrors.confirmPassword = "Passwords do not match";
-  }
-
-  if (!terms) {
-    newErrors.terms = "Accept Terms & Conditions";
-  }
-
-  setErrors(newErrors);
-
-  return Object.keys(newErrors).length === 0;
-};
-  const handleSubmit = (e) => {
-
-  e.preventDefault();
-
-  if (!validateForm()) return;
-
-  setSuccess("Registration Successful!");
-
-  console.log({
-    fullName,
-    email,
-    mobile,
-    password,
-    confirmPassword,
-    role,
-    gender,
-    dob,
-    city,
-    category,
-    skills,
-    resume,
-    terms,
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    mobile: "",
+    password: "",
+    confirmPassword: "",
+    gender: "",
+    dob: "",
+    college: "",
+    branch: "",
+    graduationYear: "",
+    skills: "",
+    resume: "",
+    terms: false,
   });
 
-  handleReset();
-  
-};
+  const [errors, setErrors] = useState({});
+  const [success, setSuccess] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+
+    setFormData({
+      ...formData,
+      [name]: type === "checkbox" ? checked : value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    let newErrors = {};
+
+    if (formData.fullName.trim() === "")
+      newErrors.fullName = "Full Name is required.";
+
+    if (formData.email.trim() === "")
+      newErrors.email = "Email is required.";
+    else if (
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+    )
+      newErrors.email = "Enter a valid email.";
+
+    if (!/^[0-9]{10}$/.test(formData.mobile))
+      newErrors.mobile = "Enter a valid 10-digit mobile number.";
+
+    if (
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(
+        formData.password
+      )
+    )
+      newErrors.password =
+        "Password must be at least 8 characters with uppercase, lowercase, number and special character.";
+
+    if (formData.confirmPassword !== formData.password)
+      newErrors.confirmPassword = "Passwords do not match.";
+
+    if (!formData.terms)
+      newErrors.terms = "Please accept Terms & Conditions.";
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length === 0) {
+      setSuccess("Registration Successful!");
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+
+      setFormData({
+        fullName: "",
+        email: "",
+        mobile: "",
+        password: "",
+        confirmPassword: "",
+        gender: "",
+        dob: "",
+        college: "",
+        branch: "",
+        graduationYear: "",
+        skills: "",
+        resume: "",
+        terms: false,
+      });
+    }
+  };
 
   const handleReset = () => {
-    setFullName("");
-    setEmail("");
-    setMobile("");
-    setPassword("");
-    setConfirmPassword("");
-    setRole("Customer");
-    setGender("");
-    setDob("");
-    setCity("");
-    setCategory("");
-    setSkills("");
-    setResume(null);
-    setTerms(false);
+    setFormData({
+      fullName: "",
+      email: "",
+      mobile: "",
+      password: "",
+      confirmPassword: "",
+      gender: "",
+      dob: "",
+      college: "",
+      branch: "",
+      graduationYear: "",
+      skills: "",
+      resume: "",
+      terms: false,
+    });
+
     setErrors({});
+    setSuccess("");
   };
 
   return (
-    <div style={{ width: "500px", margin: "30px auto" }}>
-      <h1 style={{ textAlign: "center" }}>Join ServiceHub</h1>
-        
-        {success && (
-  <p style={{ color: "green", fontWeight: "bold" }}>
-    {success}
-  </p>
-)}
+    <div className="register">
+      <h1>ServiceHub Registration</h1>
 
-{errors.fullName && (
-<p style={{color:"red"}}>{errors.fullName}</p>
-)}
+      {success && <p className="success">{success}</p>}
 
-{errors.email && (
-<p style={{color:"red"}}>{errors.email}</p>
-)}
-
-{errors.mobile && (
-<p style={{color:"red"}}>{errors.mobile}</p>
-)}
-
-{errors.password && (
-<p style={{color:"red"}}>{errors.password}</p>
-)}
-
-{errors.terms && (
-<p style={{color:"red"}}>{errors.terms}</p>
-)}
       <form onSubmit={handleSubmit}>
         <label>Full Name</label>
-        <br />
         <input
           type="text"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
+          name="fullName"
+          value={formData.fullName}
+          onChange={handleChange}
         />
-        <br />
-        <br />
+        <p className="error">{errors.fullName}</p>
 
-        <label>Email Address</label>
-        <br />
+        <label>Email</label>
         <input
           type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
         />
-        <br />
-        <br />
+        <p className="error">{errors.email}</p>
 
         <label>Mobile Number</label>
-        <br />
         <input
           type="text"
-          value={mobile}
-          onChange={(e) => setMobile(e.target.value)}
+          name="mobile"
+          value={formData.mobile}
+          onChange={handleChange}
         />
-        <br />
-        <br />
+        <p className="error">{errors.mobile}</p>
 
         <label>Password</label>
-        <br />
         <input
           type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
         />
-        <br />
-        <br />
+        <p className="error">{errors.password}</p>
 
         <label>Confirm Password</label>
-        <br />
         <input
           type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
+          name="confirmPassword"
+          value={formData.confirmPassword}
+          onChange={handleChange}
         />
-        <br />
-        <br />
-
-        <label>Register As</label>
-        <br />
-        <select value={role} onChange={(e) => setRole(e.target.value)}>
-          <option>Customer</option>
-          <option>Service Provider</option>
-        </select>
-        <br />
-        <br />
+        <p className="error">{errors.confirmPassword}</p>
 
         <label>Gender</label>
-        <br />
-        <select value={gender} onChange={(e) => setGender(e.target.value)}>
+        <select
+          name="gender"
+          value={formData.gender}
+          onChange={handleChange}
+        >
           <option value="">Select</option>
           <option>Male</option>
           <option>Female</option>
           <option>Other</option>
         </select>
-        <br />
-        <br />
 
         <label>Date of Birth</label>
-        <br />
         <input
           type="date"
-          value={dob}
-          onChange={(e) => setDob(e.target.value)}
+          name="dob"
+          value={formData.dob}
+          onChange={handleChange}
         />
-        <br />
-        <br />
 
-        <label>City</label>
-        <br />
+        <label>College Name</label>
         <input
           type="text"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
+          name="college"
+          value={formData.college}
+          onChange={handleChange}
         />
-        <br />
-        <br />
 
-        <label>Service Category</label>
-        <br />
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        >
-          <option value="">Select Category</option>
-          <option>Electrician</option>
-          <option>Plumber</option>
-          <option>Painter</option>
-          <option>Tutor</option>
-          <option>Carpenter</option>
-          <option>AC Repair</option>
-        </select>
-        <br />
-        <br />
+        <label>Branch</label>
+        <input
+          type="text"
+          name="branch"
+          value={formData.branch}
+          onChange={handleChange}
+        />
+
+        <label>Graduation Year</label>
+        <input
+          type="number"
+          name="graduationYear"
+          value={formData.graduationYear}
+          onChange={handleChange}
+        />
 
         <label>Skills</label>
-        <br />
-        <textarea
-          rows="4"
-          value={skills}
-          onChange={(e) => setSkills(e.target.value)}
-        ></textarea>
-        <br />
-        <br />
+        <input
+          type="text"
+          name="skills"
+          value={formData.skills}
+          onChange={handleChange}
+        />
 
-        <label>Upload Resume (UI Only)</label>
-        <br />
+        <label>Resume Upload</label>
         <input
           type="file"
-          onChange={(e) => setResume(e.target.files[0])}
+          name="resume"
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              resume: e.target.files[0]?.name || "",
+            })
+          }
         />
-        <br />
-        <br />
 
         <label>
           <input
             type="checkbox"
-            checked={terms}
-            onChange={(e) => setTerms(e.target.checked)}
+            name="terms"
+            checked={formData.terms}
+            onChange={handleChange}
           />
-          {" "}I accept the Terms & Conditions
+          I Accept Terms & Conditions
         </label>
-
-        <br />
-        <br />
+        <p className="error">{errors.terms}</p>
 
         <button type="submit">Register</button>
 
-        {" "}
-
-        <button type="button" onClick={handleReset}>
+        <button
+          type="button"
+          onClick={handleReset}
+        >
           Reset
         </button>
       </form>

@@ -2,9 +2,21 @@ import "./Footer.css";
 
 function Footer() {
   return (
+
     <footer className="footer">
-      <p>© 2025 ServiceHub. All Rights Reserved.</p>
+
+      <h2>ServiceHub</h2>
+
+      <p>
+        Find Trusted Local Service Providers Easily
+      </p>
+
+      <p>
+        © 2025 ServiceHub. All Rights Reserved.
+      </p>
+
     </footer>
+
   );
 }
 
