@@ -116,56 +116,61 @@ function Register() {
   return (
     <div className="register">
       <h1>ServiceHub Registration</h1>
-
+      
       {success && <p className="success">{success}</p>}
-
       <form onSubmit={handleSubmit}>
-        <label>Full Name</label>
+        
+        <label>Full Name:</label>
         <input
           type="text"
           name="fullName"
           value={formData.fullName}
           onChange={handleChange}
         />
+        <br /> 
         <p className="error">{errors.fullName}</p>
-
-        <label>Email</label>
+       
+        <label>Email:</label>
         <input
           type="email"
           name="email"
           value={formData.email}
           onChange={handleChange}
         />
+        <br /> 
         <p className="error">{errors.email}</p>
 
-        <label>Mobile Number</label>
+        <label>Mobile Number:</label>
         <input
           type="text"
           name="mobile"
           value={formData.mobile}
           onChange={handleChange}
         />
+        <br />
         <p className="error">{errors.mobile}</p>
 
-        <label>Password</label>
+        <label>Password:</label>
         <input
           type="password"
           name="password"
           value={formData.password}
           onChange={handleChange}
         />
+        <br />
         <p className="error">{errors.password}</p>
 
-        <label>Confirm Password</label>
+        <label>Confirm Password:</label>
         <input
           type="password"
           name="confirmPassword"
           value={formData.confirmPassword}
           onChange={handleChange}
         />
+        <br />
         <p className="error">{errors.confirmPassword}</p>
 
-        <label>Gender</label>
+        <label>Gender:</label>
         <select
           name="gender"
           value={formData.gender}
@@ -176,58 +181,59 @@ function Register() {
           <option>Female</option>
           <option>Other</option>
         </select>
-
-        <label>Date of Birth</label>
+        <br />
+        <label>Date of Birth:</label>
         <input
           type="date"
           name="dob"
           value={formData.dob}
           onChange={handleChange}
         />
-
-        <label>College Name</label>
+        <br />
+        <label>College Name:</label>
         <input
           type="text"
           name="college"
           value={formData.college}
           onChange={handleChange}
         />
-
-        <label>Branch</label>
+        <br />
+        <label>Branch:</label>
         <input
           type="text"
           name="branch"
           value={formData.branch}
           onChange={handleChange}
         />
-
-        <label>Graduation Year</label>
+        <br />
+        <label>Graduation Year:</label>
         <input
           type="number"
           name="graduationYear"
           value={formData.graduationYear}
           onChange={handleChange}
         />
-
-        <label>Skills</label>
+        <br />
+        <label>Skills:</label>
         <input
           type="text"
           name="skills"
           value={formData.skills}
           onChange={handleChange}
         />
-
-        <label>Resume Upload</label>
-        <input
-          type="file"
-          name="resume"
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              resume: e.target.files[0]?.name || "",
-            })
-          }
+        <br />
+        <label>Resume Upload:</label>
+          <input
+            type="file"
+            name="resume"
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                resume: e.target.files[0]?.name || "",
+              })
+            }
         />
+        <br />
 
         <label>
           <input
@@ -238,6 +244,7 @@ function Register() {
           />
           I Accept Terms & Conditions
         </label>
+        <br />
         <p className="error">{errors.terms}</p>
 
         <button type="submit">Register</button>
@@ -248,6 +255,7 @@ function Register() {
         >
           Reset
         </button>
+        <br />
       </form>
     </div>
   );

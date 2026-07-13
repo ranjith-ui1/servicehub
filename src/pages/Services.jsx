@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import services from "../data/services.js";
 import ServiceCard from "../components/ServiceCard/ServiceCard";
 import ServiceTable from "../components/ServiceTable/ServiceTable";
-
+import Loading from "../components/Loading";
+import ErrorMessage from "../components/ErrorMessage";
 
 function Services() {
   const [search, setSearch] = useState("");
@@ -15,6 +16,7 @@ function Services() {
       service.service.toLowerCase().includes(search.toLowerCase()) ||
       service.city.toLowerCase().includes(search.toLowerCase())
   );
+  
 
   return (
     <div className="services">

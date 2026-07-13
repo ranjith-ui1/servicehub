@@ -147,11 +147,11 @@ function Contact() {
       </p>
 
       <p>
-        <strong>Phone:</strong> +91 9876543210
+        <strong>Phone:</strong> +91 7207659097
       </p>
 
       <p>
-        <strong>Address:</strong> Hyderabad, Telangana, India
+        <strong>Address:</strong> Amaravthi, Andhra Pradesh, India
       </p>
 
       <p>
