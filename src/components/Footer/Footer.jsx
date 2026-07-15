@@ -12,7 +12,7 @@ function Footer() {
       </p>
 
       <p>
-        © 2025 ServiceHub. All Rights Reserved.
+        © 2026 ServiceHub. All Rights Reserved.
       </p>
 
     </footer>

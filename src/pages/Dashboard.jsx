@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-
+import "./Dashboard.css";
 
 function Dashboard() {
   const navigate = useNavigate();

@@ -1,0 +1,26 @@
+.about {
+  width: 80%;
+  margin: auto;
+  padding: 40px;
+}
+
+.about h1 {
+  text-align: center;
+  color: #0d6efd;
+}
+
+.about p {
+  font-size: 18px;
+  line-height: 1.8;
+  margin-top: 20px;
+  color: #444;
+}
+
+.about ul {
+  margin-top: 20px;
+}
+
+.about li {
+  margin: 10px 0;
+  font-size: 17px;
+}

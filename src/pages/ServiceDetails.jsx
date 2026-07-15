@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import services from "../data/services.js";
+import services from "../data/services";
 
 function ServiceDetails() {
   const { id } = useParams();

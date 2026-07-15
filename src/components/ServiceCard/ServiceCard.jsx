@@ -1,3 +1,4 @@
+import "./ServiceCard.css";
 function ServiceCard({ service }) {
   return (
     <div

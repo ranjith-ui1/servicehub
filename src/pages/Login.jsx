@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import "./Login.css";
 
 
 function Login() {
@@ -71,11 +72,11 @@ function Login() {
   return (
     <div className="login">
 
-      <h1>ServiceHub Login</h1>
+      <h2>ServiceHub Login</h2>
 
       <form onSubmit={handleLogin}>
 
-        <label>Email Address</label>
+        <label>Email Address:</label>
 
         <input
           type="email"
@@ -83,8 +84,9 @@ function Login() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-
-        <label>Password</label>
+        <br />
+        <br />
+        <label>Password:</label>
 
         <input
           type={showPassword ? "text" : "password"}
@@ -92,6 +94,7 @@ function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        
 
         <button
           type="button"
@@ -99,7 +102,8 @@ function Login() {
         >
           {showPassword ? "Hide Password" : "Show Password"}
         </button>
-
+        <br />
+        <br />
         {error && (
           <p className="error">{error}</p>
         )}

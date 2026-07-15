@@ -2,8 +2,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Layout from "./components/Layout/Layout";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
-import ErrorMessage from "./components/ErrorMessage";
-import Loading from "./components/Loading";
+// import ErrorMessage from "./components/ErrorMessage";
+// import Loading from "./components/Loading";
 
 
 import Home from "./pages/Home";
@@ -22,6 +22,7 @@ import DashboardProfile from "./pages/DashboardProfile";
 import DashboardSettings from "./pages/DashboardSettings";
 
 import NotFound from "./pages/NotFound";
+
 
 function App() {
   return (

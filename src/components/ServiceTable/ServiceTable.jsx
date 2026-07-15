@@ -1,45 +1,32 @@
+import { Link } from "react-router-dom";
+import "./ServiceCard.css";
 
-
-function ServiceTable({ services }) {
+function ServiceCard({ service }) {
   return (
-    <div className="table-container">
-      <h2>Registered Service Providers</h2>
+    <div className="service-card">
 
-      <table className="service-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Provider</th>
-            <th>Service</th>
-            <th>City</th>
-            <th>Price (₹)</th>
-            <th>Rating</th>
-            <th>Status</th>
-          </tr>
-        </thead>
+      <h2>{service.provider}</h2>
 
-        <tbody>
-          {services.map((service) => (
-            <tr key={service.id}>
-              <td>{service.id}</td>
-              <td>{service.provider}</td>
-              <td>{service.service}</td>
-              <td>{service.city}</td>
-              <td>{service.price}</td>
-              <td>⭐ {service.rating}</td>
-              <td>
-                {service.rating >= 4.8 ? (
-                  <span className="active">Available</span>
-                ) : (
-                  <span className="busy">Busy</span>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <p><b>Service:</b> {service.service}</p>
+
+      <p><b>City:</b> {service.city}</p>
+
+      <p><b>Price:</b> ₹{service.price}</p>
+
+      <p><b>Rating:</b> ⭐ {service.rating}</p>
+
+      <p><b>Experience:</b> {service.experience}</p>
+
+      <p><b>Phone:</b> {service.phone}</p>
+
+      <p><b>Status:</b> {service.status}</p>
+
+      <Link to={`/service/${service.id}`}>
+        <button>View Details</button>
+      </Link>
+
     </div>
   );
 }
 
-export default ServiceTable;
+export default ServiceCard;

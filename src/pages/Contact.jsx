@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./Contact.css";
 
 function Contact() {
   const [name, setName] = useState("");
@@ -39,14 +40,14 @@ function Contact() {
         boxShadow: "0px 0px 10px #ccc",
       }}
     >
-      <h1
+      <h2
         style={{
           textAlign: "center",
           color: "#2563EB",
         }}
       >
         Contact ServiceHub
-      </h1>
+      </h2>
 
       <p style={{ textAlign: "center" }}>
         We'd love to hear from you. Send us your query.
