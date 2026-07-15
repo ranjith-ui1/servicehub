@@ -39,7 +39,7 @@ function App() {
 
           <Route path="contact" element={<Contact />} />
 
-          {/* <Route path="register" element={<Register />} /> */}
+           <Route path="register" element={<Register />} />
 
           <Route path="login" element={<Login />} />
 
