@@ -194,13 +194,13 @@ function Register() {
         </select>
         <p className="error">{errors.gender}</p>
 
-        <label>Date of Birth</label>
+        {/* <label>Date of Birth</label>
         <input
           type="date"
           name="dob"
           value={formData.dob}
           onChange={handleChange}
-        />
+        /> */}
 
         <label>Service Category</label>
         <select
@@ -263,7 +263,7 @@ function Register() {
           onChange={handleChange}
         />
 
-        <label>Skills</label>
+        {/* <label>Skills</label>
         <input
           type="text"
           name="skills"
@@ -280,7 +280,7 @@ function Register() {
               profilePhoto: e.target.files[0]?.name || "",
             })
           }
-        />
+        /> */}
         
         <label className="checkbox-label">
           

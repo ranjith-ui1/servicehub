@@ -4,7 +4,7 @@
   width: 650px;
   margin: 40px auto;
   padding: 30px;
-  background: #ffffff;
+  background: green;
   border-radius: 10px;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
 }
@@ -22,7 +22,7 @@
   margin-top: 15px;
   margin-bottom: 5px;
   font-weight: bold;
-  color: #333;
+  color: black;
 }
 
 /* Inputs */
@@ -120,8 +120,8 @@
 /* Register Button */
 
 .register button[type="submit"] {
-  background: #0d6efd;
-  color: white;
+  background: Blue;
+  color: black;
 }
 
 .register button[type="submit"]:hover {
@@ -131,8 +131,8 @@
 /* Reset Button */
 
 .reset-btn {
-  background: #6c757d;
-  color: white;
+  background: blue;
+  color: black;
 }
 
 .reset-btn:hover {
