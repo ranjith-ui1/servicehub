@@ -1,23 +1,16 @@
 import { Outlet } from "react-router-dom";
-
 import Navbar from "../Navbar/Navbar";
-import Footer from "../Footer/Footer";
 
 function Layout() {
   return (
     <>
       <Navbar />
-
-      <main
-        style={{
-          minHeight: "80vh",
-          padding: "20px"
-        }}
-      >
+      <main className="main-content">
         <Outlet />
       </main>
-
-      <Footer />
+      <footer className="footer">
+        <p>© 2026 ServiceHub. All Rights Reserved.</p>
+      </footer>
     </>
   );
 }
