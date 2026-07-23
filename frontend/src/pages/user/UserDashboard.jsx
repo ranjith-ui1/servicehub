@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
+import { getCurrentUser } from "../../api/auth";
 
 function UserDashboard() {
-  const user = JSON.parse(localStorage.getItem("currentUser"));
+  const user = getCurrentUser();
 
   return (
     <div className="dashboard">

@@ -1,5 +1,11 @@
 import express from "express";
-import { registerUser, loginUser, getAllUsers, toggleProviderApproval, deleteUser } from "../controllers/authController.js";
+import {
+  registerUser,
+  loginUser,
+  getAllUsers,
+  toggleProviderApproval,
+  deleteUser,
+} from "../controllers/authController.js";
 
 const router = express.Router();
 

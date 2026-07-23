@@ -1,4 +1,7 @@
 /* Login page */
+*{
+  background-color: #08f3df;
+}
 
 .login-page {
   min-height: calc(100vh - 75px);

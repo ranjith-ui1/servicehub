@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       required: [true, "Email is required"],
-      unique: true, // Automatically creates an index to prevent duplicate emails
+      unique: true,
       lowercase: true,
       trim: true,
     },
@@ -24,18 +24,15 @@ const userSchema = new mongoose.Schema(
       enum: ["user", "provider", "admin"],
       default: "user",
     },
-    // Service Provider Specific Validation Properties
+    // Providers need admin approval before they can log in; users/admins don't.
     isApproved: {
       type: Boolean,
       default: function () {
-        // Admins and Standard Users don't need approval; providers default to false
         return this.role !== "provider";
       },
     },
   },
-  {
-    timestamps: true, // Automatically generates createdAt and updatedAt timestamps
-  }
+  { timestamps: true }
 );
 
 const User = mongoose.model("User", userSchema);

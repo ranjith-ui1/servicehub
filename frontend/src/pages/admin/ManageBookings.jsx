@@ -1,106 +1,82 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import API from "../../api/axios";
+
+const statusColor = (status) => {
+  if (status === "Approved") return "status-approved";
+  if (status === "Rejected" || status === "Cancelled") return "status-rejected";
+  return "status-pending";
+};
 
 function ManageBookings() {
   const [allBookings, setAllBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Sync total transactional booking records from MongoDB Atlas
-  const syncAdminBookings = () => {
-    fetch("http://localhost:5000/api/bookings/admin/all")
-      .then((res) => res.json())
-      .then((resData) => {
-        if (resData.success) {
-          setAllBookings(resData.data);
-        }
+  const syncBookings = () => {
+    API.get("/bookings/admin/all")
+      .then(({ data }) => {
+        if (data.success) setAllBookings(data.data);
       })
-      .catch((err) => console.error("Database connection failed:", err))
+      .catch((err) => console.error("Fetch failed:", err))
       .finally(() => setLoading(false));
   };
 
   useEffect(() => {
-    syncAdminBookings();
+    syncBookings();
   }, []);
 
-  // Global Administrative Override: Delete/Remove an accidental booking entry
-  const handlePurgeBooking = async (bookingId) => {
-    if (window.confirm("Are you sure you want to permanently delete this booking record from the system?")) {
-      try {
-        // Re-using the cancel status workflow via the backend update endpoint
-        const response = await fetch(`http://localhost:5000/api/bookings/${bookingId}/status`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ status: "Cancelled" })
-        });
-        const data = await response.json();
-        if (data.success) {
-          alert("Booking status set to Cancelled successfully.");
-          syncAdminBookings(); // Refresh the list
-        }
-      } catch (err) {
-        console.error("Failed to alter booking document:", err);
+  const handleCancelBooking = async (id) => {
+    if (!window.confirm("Cancel this booking?")) return;
+    try {
+      const { data } = await API.put(`/bookings/${id}/status`, { status: "Cancelled" });
+      if (data.success) {
+        alert("Booking cancelled.");
+        syncBookings();
       }
-    }
-  };
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "Approved": return "#10b981"; // Green
-      case "Rejected":
-      case "Cancelled": return "#ef4444"; // Red
-      default: return "#f59e0b"; // Orange (Pending)
+    } catch (err) {
+      console.error(err);
     }
   };
 
   if (loading) {
     return (
-      <div className="page-container" style={{ padding: "2rem" }}>
-        <h3>Fetching system transaction logs from Atlas...</h3>
+      <div className="page-container">
+        <h3>Loading bookings...</h3>
       </div>
     );
   }
 
   return (
-    <div className="page-container" style={{ padding: "2rem" }}>
+    <div className="page-container">
       <h1>Global Bookings Administration</h1>
-      <p style={{ color: "#666", marginBottom: "1.5rem" }}>
-        Monitor, track, and manage all service transactions across the entire application platform.
-      </p>
+      <p className="muted">Monitor, track, and manage all service transactions across the platform.</p>
 
       {allBookings.length === 0 ? (
-        <p style={{ color: "#888", fontStyle: "italic" }}>No service bookings have been created on the network yet.</p>
+        <p className="muted">No service bookings have been created yet.</p>
       ) : (
-        <table style={{ width: "100%", borderCollapse: "collapse", marginTop: "1rem", textAlign: "left" }}>
+        <table className="data-table">
           <thead>
-            <tr style={{ backgroundColor: "#f3f4f6", borderBottom: "2px solid #e5e7eb" }}>
-              <th style={{ padding: "12px" }}>Customer Name</th>
-              <th style={{ padding: "12px" }}>Service Type</th>
-              <th style={{ padding: "12px" }}>Provider</th>
-              <th style={{ padding: "12px" }}>City</th>
-              <th style={{ padding: "12px" }}>Price</th>
-              <th style={{ padding: "12px" }}>Status</th>
-              <th style={{ padding: "12px" }}>Actions</th>
+            <tr>
+              <th>Customer</th>
+              <th>Service</th>
+              <th>Provider</th>
+              <th>City</th>
+              <th>Price</th>
+              <th>Status</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {allBookings.map((booking) => (
-              <tr key={booking._id} style={{ borderBottom: "1px solid #e5e7eb" }}>
-                {/* Populated from the backend customer ref link, falls back nicely if unpopulated */}
-                <td style={{ padding: "12px" }}>{booking.customer?.name || "Anonymous User"}</td>
-                <td style={{ padding: "12px", fontWeight: "600" }}>{booking.serviceName}</td>
-                <td style={{ padding: "12px" }}>{booking.providerName}</td>
-                <td style={{ padding: "12px" }}>{booking.city}</td>
-                <td style={{ padding: "12px" }}>₹{booking.price}</td>
-                <td style={{ padding: "12px", fontWeight: "bold", color: getStatusColor(booking.status) }}>
-                  {booking.status}
-                </td>
-                <td style={{ padding: "12px" }}>
+              <tr key={booking._id}>
+                <td>{booking.customer?.name || "Anonymous User"}</td>
+                <td>{booking.serviceName}</td>
+                <td>{booking.providerName}</td>
+                <td>{booking.city}</td>
+                <td>₹{booking.price}</td>
+                <td className={statusColor(booking.status)}>{booking.status}</td>
+                <td>
                   {booking.status !== "Cancelled" && (
-                    <button 
-                      onClick={() => handlePurgeBooking(booking._id)}
-                      style={{ background: "#ef4444", color: "white", border: "none", padding: "5px 10px", borderRadius: "4px", cursor: "pointer", fontSize: "0.85rem" }}
-                    >
-                      Cancel Job
-                    </button>
+                    <button className="btn-danger" onClick={() => handleCancelBooking(booking._id)}>Cancel</button>
                   )}
                 </td>
               </tr>

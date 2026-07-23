@@ -1,7 +1,7 @@
 import Booking from "../models/Booking.js";
 import Service from "../models/Service.js";
 
-// CREATE A BOOKING (USER ROLE)
+// POST /api/bookings  (user)
 export const createBooking = async (req, res, next) => {
   try {
     const { customerId, serviceId } = req.body;
@@ -17,7 +17,7 @@ export const createBooking = async (req, res, next) => {
       serviceName: targetedService.service,
       providerName: targetedService.provider,
       city: targetedService.city,
-      price: targetedService.price
+      price: targetedService.price,
     });
 
     res.status(201).json({ success: true, message: "Booking registered successfully!", data: booking });
@@ -26,7 +26,7 @@ export const createBooking = async (req, res, next) => {
   }
 };
 
-// GET USER BOOKINGS (USER ROLE)
+// GET /api/bookings/user/:customerId  (user)
 export const getUserBookings = async (req, res, next) => {
   try {
     const bookings = await Booking.find({ customer: req.params.customerId });
@@ -36,7 +36,7 @@ export const getUserBookings = async (req, res, next) => {
   }
 };
 
-// GET PROVIDER REQUESTS (PROVIDER ROLE)
+// GET /api/bookings/provider/:providerName  (provider)
 export const getProviderBookings = async (req, res, next) => {
   try {
     const bookings = await Booking.find({ providerName: req.params.providerName });
@@ -46,10 +46,10 @@ export const getProviderBookings = async (req, res, next) => {
   }
 };
 
-// UPDATE BOOKING STATUS (ADMIN & PROVIDER ROLES)
+// PUT /api/bookings/:id/status  (provider/admin) — status: Approved | Cancelled | Rejected
 export const updateBookingStatus = async (req, res, next) => {
   try {
-    const { status } = req.body; // Expects "Approved", "Cancelled", or "Rejected"
+    const { status } = req.body;
     const booking = await Booking.findByIdAndUpdate(
       req.params.id,
       { status },
@@ -66,7 +66,7 @@ export const updateBookingStatus = async (req, res, next) => {
   }
 };
 
-// GET ALL BOOKINGS (GLOBAL ADMIN OVERRIDE)
+// GET /api/bookings/admin/all  (admin)
 export const getAllBookings = async (req, res, next) => {
   try {
     const bookings = await Booking.find().populate("customer", "name email");

@@ -3,10 +3,7 @@ const logger = (req, res, next) => {
 
   res.on("finish", () => {
     const duration = Date.now() - startTime;
-
-    console.log(
-      `${req.method} ${req.originalUrl} - ${res.statusCode} - ${duration}ms`
-    );
+    console.log(`${req.method} ${req.originalUrl} - ${res.statusCode} - ${duration}ms`);
   });
 
   next();

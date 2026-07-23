@@ -1,6 +1,6 @@
 import User from "../models/User.js";
 
-// REGISTER USER
+// POST /api/auth/register
 export const registerUser = async (req, res, next) => {
   try {
     const { name, email, password, role } = req.body;
@@ -14,14 +14,14 @@ export const registerUser = async (req, res, next) => {
     res.status(201).json({
       success: true,
       message: "Registration successful!",
-      data: { id: user._id, name: user.name, email: user.email, role: user.role }
+      data: { id: user._id, name: user.name, email: user.email, role: user.role },
     });
   } catch (error) {
     next(error);
   }
 };
 
-// LOGIN USER
+// POST /api/auth/login
 export const loginUser = async (req, res, next) => {
   try {
     const { email, password, role } = req.body;
@@ -32,20 +32,20 @@ export const loginUser = async (req, res, next) => {
     }
 
     if (user.role === "provider" && !user.isApproved) {
-      return res.status(403).json({ success: false, message: "Profile pending Admin approval." });
+      return res.status(403).json({ success: false, message: "Profile pending admin approval." });
     }
 
     res.status(200).json({
       success: true,
       message: "Login successful",
-      user: { id: user._id, name: user.name, email: user.email, role: user.role }
+      user: { id: user._id, name: user.name, email: user.email, role: user.role },
     });
   } catch (error) {
     next(error);
   }
 };
 
-// GET ALL USERS (ADMIN CONTROL)
+// GET /api/auth/users  (admin)
 export const getAllUsers = async (req, res, next) => {
   try {
     const users = await User.find().select("-password");
@@ -55,7 +55,7 @@ export const getAllUsers = async (req, res, next) => {
   }
 };
 
-// TOGGLE PROVIDER APPROVAL STATUS (ADMIN CONTROL)
+// PUT /api/auth/providers/:id/approve  (admin)
 export const toggleProviderApproval = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id);
@@ -64,13 +64,16 @@ export const toggleProviderApproval = async (req, res, next) => {
     }
     user.isApproved = !user.isApproved;
     await user.save();
-    res.status(200).json({ success: true, message: `Provider status set to ${user.isApproved ? "Approved" : "Pending"}` });
+    res.status(200).json({
+      success: true,
+      message: `Provider status set to ${user.isApproved ? "Approved" : "Pending"}`,
+    });
   } catch (error) {
     next(error);
   }
 };
 
-// DELETE ACCOUNT (ADMIN CONTROL)
+// DELETE /api/auth/users/:id  (admin)
 export const deleteUser = async (req, res, next) => {
   try {
     await User.findByIdAndDelete(req.params.id);

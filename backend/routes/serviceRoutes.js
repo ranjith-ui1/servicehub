@@ -1,5 +1,4 @@
 import express from "express";
-
 import {
   getServices,
   getServiceById,
@@ -7,28 +6,14 @@ import {
   updateService,
   deleteService,
 } from "../controllers/serviceController.js";
+import validateService from "../middleware/validateService.js";
 
 const router = express.Router();
 
-
-// GET all services
 router.get("/", getServices);
-
-
-// GET service by ID
 router.get("/:id", getServiceById);
-
-
-// POST create service
-router.post("/", createService);
-
-
-// PUT update service
+router.post("/", validateService, createService);
 router.put("/:id", updateService);
-
-
-// DELETE service
 router.delete("/:id", deleteService);
-
 
 export default router;

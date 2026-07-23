@@ -1,107 +1,62 @@
 import Service from "../models/Service.js";
 
-// GET ALL SERVICES
+// GET /api/services
 export const getServices = async (req, res, next) => {
   try {
     const services = await Service.find();
-
-    res.status(200).json({
-      success: true,
-      count: services.length,
-      data: services,
-    });
+    res.status(200).json({ success: true, count: services.length, data: services });
   } catch (error) {
     next(error);
   }
 };
 
-
-// GET SINGLE SERVICE
+// GET /api/services/:id
 export const getServiceById = async (req, res, next) => {
   try {
     const service = await Service.findById(req.params.id);
-
     if (!service) {
-      return res.status(404).json({
-        success: false,
-        message: "Service not found",
-      });
+      return res.status(404).json({ success: false, message: "Service not found" });
     }
-
-    res.status(200).json({
-      success: true,
-      data: service,
-    });
+    res.status(200).json({ success: true, data: service });
   } catch (error) {
     next(error);
   }
 };
 
-
-// CREATE SERVICE
+// POST /api/services
 export const createService = async (req, res, next) => {
   try {
     const newService = await Service.create(req.body);
-
-    res.status(201).json({
-      success: true,
-      message: "Service created successfully",
-      data: newService,
-    });
+    res.status(201).json({ success: true, message: "Service created successfully", data: newService });
   } catch (error) {
     next(error);
   }
 };
 
-
-// UPDATE SERVICE
+// PUT /api/services/:id
 export const updateService = async (req, res, next) => {
   try {
-    const updatedService = await Service.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
-
-    if (!updatedService) {
-      return res.status(404).json({
-        success: false,
-        message: "Service not found",
-      });
-    }
-
-    res.status(200).json({
-      success: true,
-      message: "Service updated successfully",
-      data: updatedService,
+    const updatedService = await Service.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
     });
+    if (!updatedService) {
+      return res.status(404).json({ success: false, message: "Service not found" });
+    }
+    res.status(200).json({ success: true, message: "Service updated successfully", data: updatedService });
   } catch (error) {
     next(error);
   }
 };
 
-
-// DELETE SERVICE
+// DELETE /api/services/:id
 export const deleteService = async (req, res, next) => {
   try {
-    const deletedService = await Service.findByIdAndDelete(
-      req.params.id
-    );
-
+    const deletedService = await Service.findByIdAndDelete(req.params.id);
     if (!deletedService) {
-      return res.status(404).json({
-        success: false,
-        message: "Service not found",
-      });
+      return res.status(404).json({ success: false, message: "Service not found" });
     }
-
-    res.status(200).json({
-      success: true,
-      message: "Service deleted successfully",
-    });
+    res.status(200).json({ success: true, message: "Service deleted successfully" });
   } catch (error) {
     next(error);
   }

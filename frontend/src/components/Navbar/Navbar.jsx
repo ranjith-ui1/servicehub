@@ -1,43 +1,89 @@
 import { Link, useNavigate } from "react-router-dom";
+import { getCurrentUser, clearCurrentUser } from "../../api/auth";
+
+// --- SUB-COMPONENTS BY ROLE ---
+
+function NavUser() {
+  return (
+    <>
+      <Link to="/user" className="nav-link-accent">User Dashboard</Link>
+    </>
+  );
+}
+
+function NavProvider() {
+  return (
+    <>
+      <Link to="/provider" className="nav-link-provider">Provider Dashboard</Link>
+    </>
+  );
+}
+
+function NavAdmin() {
+  return (
+    <>
+      <Link to="/admin" className="nav-link-admin">Admin Panel</Link>
+    </>
+  );
+}
+
+function NavGuest() {
+  return (
+    <>
+      <Link to="/login">Login</Link>
+      <Link to="/register">Register</Link>
+    </>
+  );
+}
+
+// --- MAIN NAVBAR ---
 
 function Navbar() {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("currentUser"));
+  const user = getCurrentUser();
 
   const logout = () => {
-    localStorage.removeItem("currentUser");
+    clearCurrentUser();
     navigate("/login");
   };
 
+  // Check if current user is an Admin or Provider
+  const isDashboardRole = user?.role === "admin" || user?.role === "provider";
+
+  // Determine logo redirect based on role
+  const getLogoRedirect = () => {
+    if (user?.role === "admin") return "/admin";
+    if (user?.role === "provider") return "/provider";
+    return "/";
+  };
+
   return (
-    <nav className="navbar" style={{ display: 'flex', justifyContent: 'space-between', padding: '1rem', background: '#333', color: '#fff' }}>
-      <Link to="/" className="logo" style={{ color: '#fff', textDecoration: 'none', fontWeight: 'bold' }}>
+    <nav className="navbar">
+      <Link to={getLogoRedirect()} className="logo">
         ServiceHub
       </Link>
-      <div className="nav-links" style={{ display: 'flex', gap: '15px' }}>
-        <Link to="/" style={{ color: '#fff' }}>Home</Link>
-        <Link to="/about" style={{ color: '#fff' }}>About</Link>
-        <Link to="/services" style={{ color: '#fff' }}>Services</Link>
-        <Link to="/contact" style={{ color: '#fff' }}>Contact</Link>
-        
-        {/* Conditional Role-Based Rendering */}
-        {user?.role === "user" && (
-          <Link to="/user" style={{ color: '#61dafb' }}>User Dashboard</Link>
-        )}
-        {user?.role === "provider" && (
-          <Link to="/provider" style={{ color: '#4caf50' }}>Provider Dashboard</Link>
-        )}
-        {user?.role === "admin" && (
-          <Link to="/admin" style={{ color: '#ff9800', fontWeight: 'bold' }}>Admin Panel</Link>
-        )}
-        
-        {!user ? (
+
+      <div className="nav-links">
+        {/* PUBLIC LINKS: Hidden for both Provider and Admin */}
+        {!isDashboardRole && (
           <>
-            <Link to="/login" style={{ color: '#fff' }}>Login</Link>
-            <Link to="/register" style={{ color: '#fff' }}>Register</Link>
+            <Link to="/">Home</Link>
+            <Link to="/about">About</Link>
+            <Link to="/services">Services</Link>
+            <Link to="/contact">Contact</Link>
           </>
+        )}
+
+        {/* ROLE-BASED NAV */}
+        {user?.role === "user" && <NavUser />}
+        {user?.role === "provider" && <NavProvider />}
+        {user?.role === "admin" && <NavAdmin />}
+
+        {/* AUTH ACTION */}
+        {!user ? (
+          <NavGuest />
         ) : (
-          <button onClick={logout} style={{ background: '#e74c3c', color: 'white', border: 'none', padding: '5px 10px', cursor: 'pointer', borderRadius: '4px' }}>
+          <button className="btn-danger" onClick={logout}>
             Logout ({user.role})
           </button>
         )}

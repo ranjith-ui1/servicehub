@@ -1,30 +1,27 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import API from "../../api/axios";
+import { getCurrentUser } from "../../api/auth";
 
 function ServiceRequests() {
   const [requests, setRequests] = useState([]);
-  const activeProvider = JSON.parse(localStorage.getItem("currentUser")) || { name: "" };
+  const activeProvider = getCurrentUser() || { name: "" };
 
   const fetchActiveRequests = () => {
-    fetch(`http://localhost:5000/api/bookings/provider/${activeProvider.name}`)
-      .then(res => res.json())
-      .then(resData => {
-        if (resData.success) {
-          setRequests(resData.data.filter(b => b.status === "Pending"));
-        }
+    API.get(`/bookings/provider/${activeProvider.name}`)
+      .then(({ data }) => {
+        if (data.success) setRequests(data.data.filter((b) => b.status === "Pending"));
       })
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
   };
 
-  useEffect(() => { fetchActiveRequests(); }, [activeProvider.name]);
+  useEffect(() => {
+    fetchActiveRequests();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeProvider.name]);
 
   const handleActionClick = async (bookingId, nextStatus) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/bookings/${bookingId}/status`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: nextStatus })
-      });
-      const data = await response.json();
+      const { data } = await API.put(`/bookings/${bookingId}/status`, { status: nextStatus });
       if (data.success) {
         alert(data.message);
         fetchActiveRequests();
@@ -35,22 +32,22 @@ function ServiceRequests() {
   };
 
   return (
-    <div className="page-container" style={{ padding: '2rem' }}>
-      <h1>Incoming Contract Leads Matrix</h1>
-      <div className="service-cards" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "20px", marginTop: "1rem" }}>
-        {requests.map(req => (
-          <div className="booking-card" key={req._id} style={{ border: "1px solid #ddd", padding: "15px", borderRadius: "8px" }}>
-            <h3>Service Ordered: {req.serviceName}</h3>
-            <p><strong>Quoted Price Payout:</strong> ₹{req.price}</p>
-            <p><strong>Operating City:</strong> {req.city}</p>
-            <div style={{ display: 'flex', gap: '10px', marginTop: '15px' }}>
-              <button onClick={() => handleActionClick(req._id, "Approved")} style={{ background: '#10b981', color: 'white', border: "none", padding: "8px", cursor: "pointer", width: "100%", borderRadius: "4px" }}>Accept Contract</button>
-              <button onClick={() => handleActionClick(req._id, "Rejected")} style={{ background: '#ef4444', color: 'white', border: "none", padding: "8px", cursor: "pointer", width: "100%", borderRadius: "4px" }}>Decline Request</button>
+    <div className="page-container">
+      <h1>Incoming Job Requests</h1>
+      <div className="service-cards">
+        {requests.map((req) => (
+          <div className="booking-card" key={req._id}>
+            <h3>Service Requested: {req.serviceName}</h3>
+            <p><strong>Quoted Price:</strong> ₹{req.price}</p>
+            <p><strong>City:</strong> {req.city}</p>
+            <div className="card-actions">
+              <button className="btn-success" onClick={() => handleActionClick(req._id, "Approved")}>Accept</button>
+              <button className="btn-danger" onClick={() => handleActionClick(req._id, "Rejected")}>Decline</button>
             </div>
           </div>
         ))}
       </div>
-      {requests.length === 0 && <p style={{ marginTop: "1rem", color: "#666" }}>No current pending requests at this time.</p>}
+      {requests.length === 0 && <p className="muted">No pending requests at this time.</p>}
     </div>
   );
 }
