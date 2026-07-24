@@ -18,10 +18,31 @@ connectDB();
 
 const app = express();
 
-// CORS Configuration (Configured once)
+// Allowed origins array (Handles local dev + production deployment)
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3000",
+  process.env.CLIENT_URL, // e.g., https://servicehub-rlm713maq-ranjith-ui1s-project.vercel.app
+].filter(Boolean); // Filters out undefined if CLIENT_URL is not set
+
+// Dynamic CORS Configuration
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173", // Fallback for local Vite dev
+    origin: (origin, callback) => {
+      // Allow requests with no origin (e.g., Postman, mobile apps, curl)
+      if (!origin) return callback(null, true);
+
+      // Check if origin matches allowed list or matches Vercel preview deployment patterns
+      const isAllowed =
+        allowedOrigins.includes(origin) ||
+        /\.vercel\.app$/.test(origin);
+
+      if (isAllowed) {
+        callback(null, true);
+      } else {
+        callback(new Error(`CORS policy blocked request from origin: ${origin}`));
+      }
+    },
     credentials: true,
   })
 );
