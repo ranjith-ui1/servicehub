@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../../api/axios";
 import { setCurrentUser } from "../../api/auth";
+import "./css/Login.css";
 
 function Login() {
   const [email, setEmail] = useState("");
