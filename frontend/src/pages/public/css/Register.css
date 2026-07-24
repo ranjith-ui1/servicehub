@@ -1,8 +1,3 @@
-/* Main page */
-*{
-  background-color: #08f3df;
-}
-
 .register-page {
   min-height: calc(100vh - 75px);
 

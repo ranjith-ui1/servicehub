@@ -10,40 +10,42 @@ import bookingRoutes from "./routes/bookingRoutes.js";
 import logger from "./middleware/logger.js";
 import errorHandler from "./middleware/errorHandler.js";
 
+// Load environment variables
 dotenv.config();
+
+// Connect to MongoDB
+connectDB();
 
 const app = express();
 
-connectDB();
-
+// CORS Configuration (Configured once)
 app.use(
   cors({
-    origin:process.env.CLIENT_URL,
-    credentials:true
+    origin: process.env.CLIENT_URL || "http://localhost:5173", // Fallback for local Vite dev
+    credentials: true,
   })
 );
 
-// Middleware
-app.use(cors());
+// Built-in & Custom Middlewares
 app.use(express.json());
 app.use(logger);
 
-// Root route
+// Root route (Health check)
 app.get("/", (req, res) => {
   res.json({ success: true, message: "Welcome to ServiceHub Backend API" });
 });
 
-// API routers
+// API Routes
 app.use("/api/services", serviceRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/bookings", bookingRoutes);
 
-// 404 handler
+// 404 Handler (Runs if no route matches)
 app.use((req, res) => {
   res.status(404).json({ success: false, message: "API Route Not Found" });
 });
 
-// Global error handler (must be last)
+// Global Error Handler (Must be last middleware)
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;

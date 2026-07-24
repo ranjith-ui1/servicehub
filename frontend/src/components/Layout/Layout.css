@@ -1,0 +1,14 @@
+.main-content {
+  min-height: calc(100vh - 130px);
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.footer {
+  text-align: center;
+  padding: 20px;
+  background: #fff;
+  border-top: 1px solid #e2e8f0;
+  color: #64748b;
+}
